@@ -1,0 +1,25 @@
+<div>
+    <div>姓名-{{name}}</div>
+    <div>年龄-{{age}}</div>
+    <div>主页-{{{homepage}}}</div>
+    <div>
+        兴趣：
+        <ul>
+            {{#hobbies}}
+            <li>{{.}}</li>
+            {{/hobbies}}
+        </ul>
+    </div>
+            
+    <div>
+        朋友：
+        <ul>
+            {{#friends}}
+            <li>{{.}}</li>
+            {{/friends}}
+            {{^friends}}
+            没有朋友
+            {{/friends}}
+        </ul>
+    </div>
+</div>
