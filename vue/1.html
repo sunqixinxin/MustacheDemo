@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1</title>
+</head>
+<body>
+    <div id="demo">
+        <div>
+            <div>
+                姓名-{{name}}
+            </div>
+            <div>random-{{randominfo}}</div>
+            <div>
+                兴趣：
+                <ul>
+                </ul>
+            </div>
+
+            <div>
+                朋友：
+                <ul>
+                </ul>
+            </div>
+            <div>
+                <h3>{{firstName.length}}（使用‘.'获取属性）</h3>
+                <h3>{{firstName + lastName}}（字符串拼接）</h3>
+                <h3>{{firstName + ' ' + lastName}}（注意名字中间的的空格）</h3>
+                <h3>{{firstName}} {{lastName}}（注意名字中间的空格）</h3>
+                <h3>{{randominfo * 10}}（简单的算术表达式）</h3>
+                <h3>{{lastName == 'Curry' &#63; '真棒' : '还好'}}（三目运算）</h3>
+                <h3>{{lastName.split('nn').reverse().join(',')}}（使用javascript函数）</h3>
+                <h3>{{customMethod(lastName)}}(使用自定义的函数)</h3>
+            </div>
+        </div>
+    </div>
+
+    <script id="template" type="text/x-mustache-template">
+        
+    </script>
+
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script type="text/javascript">
+        var data = {
+            "name": '张三',
+            "firstName": "sunny",
+            "lastName":"sun",
+            'title': function () {
+                return "<b>" + this.name + "的信息：</b>";
+            },
+            "hobbies": ['唱歌', '跳舞'],
+            "friends": ['好友1', '好友2'],
+            "homepage": "<a target='_blank' href='https://handlebarsjs.com/guide/'>我的主页<a>",
+            "randominfo": Math.random(),
+            "age": function () {
+                return new Date().getSeconds()
+            },
+            "sex": function () {
+                return function (text, render) {
+
+                    var age = render(text);
+                    console.log(age);
+                    if (parseInt(age) % 2 === 0) {
+                        return "男";
+                    } else {
+                        return "女";
+                    }
+                }
+            }
+        }
+
+        new Vue({
+            el: '#demo',
+            data: data,
+            methods: {
+                customMethod(str) {
+                    return str.split('nn').reverse().join(',')
+                }
+            }
+        })
+    </script>
+
+</body>
+</html>

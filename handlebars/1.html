@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1</title>
+</head>
+<body>
+    <div id="demo">Loading</div>
+
+    <script id="template" type="text/x-mustache-template">
+        <div>
+            <div>{{{title}}}</div>
+            <div>
+                姓名-
+                {{#with name}} {{.}} {{/with}}
+            </div>
+            <div>年龄-{{age}}</div>
+            <div>
+                性别-
+                {{#sex}}{{age}}{{/sex}}
+            </div>
+            <div>主页-{{{homepage}}}</div>
+            <div>random-{{randominfo}}</div>
+            <div>
+                兴趣：
+                <ul>
+                    {{#each hobbies}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            <div>
+                朋友：
+                <ul>
+                    {{#friends}}
+                    <li>{{.}}</li>
+                    {{/friends}}
+                    {{^friends}}
+                    没有朋友
+                    {{/friends}}
+                </ul>
+            </div>
+        </div>
+    </script>
+
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script type="text/javascript">
+        var data = {
+            "name": '张三',
+            'title': function () {
+                return "<b>" + this.name + "的信息：</b>";
+            },
+            "hobbies": ['唱歌', '跳舞'],
+            "friends": ['好友1', '好友2'],
+            "homepage": "<a target='_blank' href='https://handlebarsjs.com/guide/'>我的主页<a>",
+            "randominfo": Math.random(),
+            "age": function () {
+                return new Date().getSeconds()
+            },
+            "sex": function () {
+                return function (text, render) {
+
+                    var age = render(text);
+                    console.log(age);
+                    if (parseInt(age) % 2 === 0) {
+                        return "男";
+                    } else {
+                        return "女";
+                    }
+                }
+            }
+        }
+        
+        var template = Handlebars.compile($('#template').html());
+
+        var htmlStr = template(data);
+        $('#demo').html(htmlStr);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mustache testing page 3</title>
+</head>
+<body>
+    <div>
+        <div>
+            Name: <select name="nameList" id="nameList" onchange="listChange(this)"></select>
+        </div>
+        <div id="demo">
+            Loading
+        </div>
+    </div>
+
+    <script id="template" type="text/x-mustache-template">
+        <div>
+            <div>{{{title}}}</div>
+            <div>姓名-{{name}}</div>
+
+            <div>年龄-{{age}}</div>
+            <div>主页-{{{homepage}}}</div>
+            <div>
+                兴趣：
+                <ul>
+                    {{#hobbies}}
+                    <li>{{.}}</li>
+                    {{/hobbies}}
+                </ul>
+            </div>
+
+            <div>
+                朋友：
+                <ul>
+                    {{#friends}}
+                    <li>{{.}}</li>
+                    {{/friends}}
+                    {{^friends}}
+                    没有朋友
+                    {{/friends}}
+                </ul>
+            </div>
+            <div>
+                <input type="button" value="戳我一下" onclick="clickBtn('{{name}}');" />
+            </div>
+        </div>
+    </script>
+
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/mustache.js/2.3.0/mustache.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            loadCombox();
+        });
+
+        var data = {
+            "name": "persons data list",
+            "persons": [
+                {
+                    "id": 1,
+                    "name": '张三',
+                    'title': function () {
+                        return "<b>" + this.name + "的信息：</b>";
+                    },
+                    "age": 20,
+                    "hobbies": ['唱歌', '跳舞'],
+                    "friends": ['好友1', '好友2'],
+                    "homepage": "<a target='_blank' href='https://github.com/janl/mustache.js'>张三的主页<a>"
+                },
+                {
+                    "id": 2,
+                    "name": '李四',
+                    "age": 30,
+                    "hobbies": ['唱歌', '跳舞'],
+                    "friends": ['好友3', '好友4'],
+                    "homepage": "<a target='_blank' href='http://www.baidu.com/'>李四的主页<a>"
+                }]
+        };
+
+        var loadHtml = function (data) {
+            var temp = Mustache.render($('#template').html(), data);
+            $('#demo').html(temp);
+        }
+
+        // obj: html element
+        var listChange = function (obj) {
+            console.log(Object.prototype.toString.call(obj));
+            console.log(obj.selectedIndex);
+            console.log(obj.value);
+            var dataItem = data.persons.filter(t => t.id == obj.value);
+            console.log(dataItem);
+            loadHtml(dataItem[0]);
+        }
+
+        // e: event
+        var listChange1 = function (e) {
+            console.log(Object.prototype.toString.call(e));
+            console.log(e.target.selectedIndex);
+            console.log(e.target.value);
+            var dataItem = data.persons.filter(t => t.id == e.target.value);
+            console.log(dataItem);
+            loadHtml(dataItem[0]);
+        }
+
+        var clickBtn = function (name) {
+            alert("你戳了" + name + "一下！");
+        }
+
+        var loadCombox = function () {
+            for (var i = 0; i < data.persons.length; i++) {
+                var objOption = document.createElement("OPTION");
+                objOption.value = data.persons[i].id;
+                objOption.text = data.persons[i].name;
+
+                document.getElementById("nameList").options.add(objOption);
+                //document.getElementById("nameList").onchange = listChange1;
+            }
+
+            document.getElementById("nameList").onchange();
+        }
+    </script>
+
+</body>
+</html>

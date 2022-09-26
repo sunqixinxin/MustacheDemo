@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mustache testing page 2</title>
+</head>
+<body>
+    <div id="demo">Loading</div>
+
+    <script id="nameTemplate" type="text/x-mustache-template">
+        <strong>{{.}}的信息(子模板)：</strong>
+    </script>
+
+    <script id="infoTemplate" type="text/x-mustache-template">
+        <div>
+            <div>
+                {{&title}}
+            </div>
+
+            <!--
+            {{!子母版}}
+            {{#name}}
+            {{> nameTemplate}}
+            {{/name}}-->
+
+            
+            <div>姓名-{{name}}</div>
+  
+            <div>年龄-{{age}}</div>
+            <div>主页-{{{homepage}}}</div>
+            <div>
+                兴趣：
+                <ul>
+                    {{#hobbies}}
+                    <li>{{.}}</li>
+                    {{/hobbies}}
+                </ul>
+            </div>
+
+            <div>
+                朋友：
+                <ul>
+                    {{#friends}}
+                    <li>{{.}}</li>
+                    {{/friends}}
+                    {{^friends}}
+                    没有朋友
+                    {{/friends}}
+                </ul>
+            </div>
+        </div>
+    </script>
+
+    <script id="maintemplate" type="text/x-mustache-template">
+        <div>
+            <div>有子模板：<b>{{name}}</b></div>
+            <div>
+                {{#persons.0}}
+                    <table>
+                        <tr>
+                            {{#persons}}
+                                <td style="border:1px solid red;">
+                                    {{!子母版}}
+                                    {{> subtemplate}}
+                                </td>
+                            {{/persons}}
+
+                        </tr>
+                    </table>
+                {{/persons.0}}
+                {{^persons.0}}
+                    <b>没有找到任何数据<b/>
+                {{/persons.0}}
+            </div>
+        </div>
+    </script>
+
+    <script id="template" type="text/x-mustache-template">
+        <div>
+            <div>无子模板：<b>{{name}}</b></div>
+            <div>
+                {{#persons.0}}
+                    <table>
+                        <tr>
+                            {{#persons}}
+                                <td style="border:1px solid red;">
+                                    <div>
+                                        <div>
+                                        {{&title}}
+                                        </div>
+
+                                        <!--
+                                        {{!子母版}}
+                                        {{#name}}
+                                        {{> nameTemplate}}
+                                        {{/name}}-->
+
+                                        <div>姓名-{{name}}</div>
+                                        <div>年龄-{{age}}</div>
+                                        <div>主页-{{{homepage}}}</div>
+                                        <div>
+                                            兴趣：
+                                            <ul>
+                                                {{#hobbies}}
+                                                <li>{{.}}</li>
+                                                {{/hobbies}}
+                                            </ul>
+                                        </div>
+
+                                        <div>
+                                            朋友：
+                                            <ul>
+                                                {{#friends}}
+                                                <li>{{.}}</li>
+                                                {{/friends}}
+                                                {{^friends}}
+                                                没有朋友
+                                                {{/friends}}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            {{/persons}}
+
+                        </tr>
+                    </table>
+                {{/persons.0}}
+                {{^persons.0}}
+                    <b>没有找到任何数据</>
+                {{/persons.0}}
+            </div>
+        </div>
+    </script>
+
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/mustache.js/2.3.0/mustache.js"></script>
+    <script type="text/javascript">
+        var data = {
+            "name": "persons data list",
+            "persons": [
+                {
+                    "name": '张三',
+                    'title': function () {
+                        return "<b>" + this.name + "的信息：</b>";
+                    },
+                    "age": 20,
+                    "hobbies": ['唱歌', '跳舞'],
+                    "friends": ['好友1', '好友2'],
+                    "homepage": "<a target='_blank' href='https://github.com/janl/mustache.js'>张三的主页<a>"
+                },
+                {
+                    "name": '李四',
+                    "age": 30,
+                    "hobbies": ['唱歌', '跳舞'],
+                    "friends": ['好友3', '好友4'],
+                    "homepage": "<a target='_blank' href='http://www.baidu.com/'>李四的主页<a>"
+                }]
+        };
+
+        // 有子模板Demo
+        var template = $('#maintemplate').html();
+        var subTemplates = {
+            subtemplate: $('#infoTemplate').html(),
+            nameTemplate: $('#nameTemplate').html()
+        };
+        var temp = Mustache.render(template, data, subTemplates);
+
+        // 没有子模板Demo
+        //var temp = Mustache.render($('#template').html(), data, null);
+
+        $('#demo').html(temp);
+    </script>
+
+</body>
+</html>
